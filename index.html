@@ -190,6 +190,48 @@ document.querySelector(".drone").style.animation="fly .8s infinite";
 }
 
 </script>
+let gameStart = false;
+
+document.getElementById("startBtn").onclick=function(){
+
+    gameStart = true;
+
+    alert("🤖 足球無人機啟動！");
+
+};
+
+
+/* 修改鍵盤控制 */
+
+document.addEventListener("keydown",function(e){
+
+    if(!gameStart){
+        return;
+    }
+
+
+    if(e.key=="ArrowLeft"){
+        x-=20;
+    }
+
+
+    if(e.key=="ArrowRight"){
+        x+=20;
+    }
+
+
+    if(e.code=="Space"){
+        shoot();
+    }
+
+
+    if(x<0)x=0;
+    if(x>800)x=800;
+
+
+    drone.style.left=x+"px";
+
+});
 
 </body>
 </html>
@@ -221,121 +263,299 @@ document.querySelector(".drone").style.animation="fly .8s infinite";
 
 <style>
 
-.game{
-    text-align:center;
-    margin:60px auto;
-    padding:30px;
-    background:#e8f8ff;
-    border-radius:30px;
-    width:90%;
-    max-width:700px;
 }
 
-#field{
-    height:250px;
-    background:
-    linear-gradient(#54c954,#38a638);
-    border-radius:20px;
-    position:relative;
+
+```html
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>足球無人機射門大作戰</title>
+
+<style>
+body{
+    margin:0;
     overflow:hidden;
-    margin:30px 0;
+    background:linear-gradient(#75d9ff,#ffffff);
+    font-family:"Arial",sans-serif;
+    text-align:center;
 }
 
+/* 標題 */
+h1{
+    color:white;
+    background:#008cff;
+    margin:0;
+    padding:15px;
+    text-shadow:2px 2px #004477;
+}
+
+/* 遊戲區 */
+#game{
+    position:relative;
+    width:900px;
+    height:500px;
+    margin:auto;
+    background:#55c85b;
+    border:8px solid #008cff;
+    border-radius:30px;
+    overflow:hidden;
+}
+
+/* 草地線 */
+.line{
+    position:absolute;
+    width:100%;
+    height:5px;
+    background:white;
+    top:350px;
+}
+
+
+/* 無人機 */
+#drone{
+    position:absolute;
+    left:400px;
+    top:60px;
+    width:100px;
+    height:60px;
+    background:#009cff;
+    border-radius:40px;
+    box-shadow:0 0 20px white;
+}
+
+#drone:before{
+    content:"";
+    position:absolute;
+    width:30px;
+    height:30px;
+    background:white;
+    border-radius:50%;
+    left:35px;
+    top:15px;
+}
+
+
+/* 螺旋槳 */
+.prop{
+    position:absolute;
+    width:60px;
+    height:5px;
+    background:#222;
+    animation:spin .5s infinite linear;
+}
+
+.left{
+    left:-40px;
+    top:10px;
+}
+
+.right{
+    right:-40px;
+    top:10px;
+}
+
+@keyframes spin{
+    100%{transform:rotate(360deg);}
+}
+
+
+/* 足球 */
+#ball{
+    position:absolute;
+    width:35px;
+    height:35px;
+    background:white;
+    border-radius:50%;
+    display:none;
+    border:3px solid black;
+}
+
+
+/* 球門 */
 #goal{
     position:absolute;
-    right:30px;
-    top:80px;
-    font-size:80px;
+    bottom:50px;
+    left:350px;
+    width:200px;
+    height:90px;
+    border:8px solid white;
+    background:rgba(255,255,255,.3);
 }
 
 
-#gameBall{
-
+/* 守門機器人 */
+#keeper{
     position:absolute;
-    left:60px;
-    bottom:70px;
-    font-size:60px;
-
-}
-
-
-.game button{
-
-    margin:10px;
-    background:#00AEEF;
-    color:white;
-    border:none;
-    padding:15px 25px;
+    bottom:60px;
+    left:420px;
+    width:60px;
+    height:80px;
+    background:#0077dd;
     border-radius:30px;
-    cursor:pointer;
-
 }
 
 
-.game button:hover{
-    background:#007bb5;
+/* 分數 */
+#score{
+    font-size:25px;
+    color:#003366;
 }
 
+button{
+    padding:12px 25px;
+    background:#008cff;
+    color:white;
+    border:0;
+    border-radius:20px;
+    font-size:18px;
+}
 
 </style>
+</head>
+
+
+<body>
+
+<h1>🤖 足球無人機射門大作戰 ⚽</h1>
+
+<div id="score">
+分數：<span id="point">0</span>
+</div>
+
+<div id="game">
+
+<div id="drone">
+<div class="prop left"></div>
+<div class="prop right"></div>
+</div>
+
+
+<div id="ball"></div>
+
+<div id="goal"></div>
+
+<div id="keeper"></div>
+
+<div class="line"></div>
+
+</div>
+
+<br>
+
+<button onclick="shoot()">發射足球 🚀</button>
+
+<p>
+方向鍵 ← → 控制無人機瞄準<br>
+SPACE鍵射門
+</p>
 
 
 <script>
 
+let drone=document.getElementById("drone");
+let ball=document.getElementById("ball");
+let point=document.getElementById("point");
+
+let x=400;
 let score=0;
+
+
+/* 控制 */
+document.addEventListener("keydown",function(e){
+
+if(e.key=="ArrowLeft"){
+    x-=20;
+}
+
+if(e.key=="ArrowRight"){
+    x+=20;
+}
+
+if(x<0)x=0;
+if(x>800)x=800;
+
+drone.style.left=x+"px";
+
+
+if(e.code=="Space"){
+    shoot();
+}
+
+});
+
 
 
 function shoot(){
 
-let ball=document.getElementById("gameBall");
-let message=document.getElementById("message");
+ball.style.display="block";
 
-ball.style.transition="1s";
-ball.style.left="80%";
-
-
-setTimeout(()=>{
-
-let result=Math.random();
+let bx=x+35;
+let by=120;
 
 
-if(result>0.45){
+ball.style.left=bx+"px";
+ball.style.top=by+"px";
+
+
+let timer=setInterval(()=>{
+
+by+=10;
+
+ball.style.top=by+"px";
+
+
+/* 進球判定 */
+
+if(
+by>330 &&
+bx>350 &&
+bx<550
+){
 
 score++;
 
-message.innerHTML="🎉 進球成功！無人機射門 +1";
+point.innerHTML=score;
 
-}else{
+alert("🎉 GOAL!! 得分!");
 
-message.innerHTML="😢 被守門員擋下！";
+reset();
 
-}
-
-
-document.getElementById("score").innerHTML=score;
-
-
-ball.style.transition="0s";
-ball.style.left="60px";
-
-
-},1000);
-
+clearInterval(timer);
 
 }
 
 
 
-function resetGame(){
+/* 出界 */
 
-score=0;
+if(by>500){
 
-document.getElementById("score").innerHTML=0;
+reset();
 
-document.getElementById("message").innerHTML=
-"遊戲重新開始！";
+clearInterval(timer);
 
 }
 
+
+},30);
+
+}
+
+
+
+function reset(){
+
+ball.style.display="none";
+
+ball.style.top="120px";
+
+}
 
 </script>
+
+</body>
+</html>
+```
+<button id="startBtn">開始遊戲 🚀</button>
