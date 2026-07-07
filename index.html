@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Future Soccer Drone</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Microsoft JhengHei",sans-serif;
+}
+
+body{
+    background:linear-gradient(180deg,#8fd8ff,#ffffff);
+    overflow-x:hidden;
+}
+
+header{
+    background:#00AEEF;
+    color:white;
+    padding:20px;
+    text-align:center;
+    box-shadow:0 5px 15px rgba(0,0,0,.2);
+}
+
+header h1{
+    font-size:40px;
+}
+
+.hero{
+    text-align:center;
+    padding:60px 20px;
+}
+
+.drone{
+    width:220px;
+    margin:auto;
+    animation:fly 3s ease-in-out infinite;
+}
+
+@keyframes fly{
+    0%{transform:translateY(0px);}
+    50%{transform:translateY(-25px);}
+    100%{transform:translateY(0px);}
+}
+
+.ball{
+    width:90px;
+    height:90px;
+    background:white;
+    border-radius:50%;
+    margin:40px auto;
+    position:relative;
+    box-shadow:0 0 20px rgba(0,0,0,.2);
+    animation:spin 6s linear infinite;
+}
+
+.ball:before{
+    content:"⚽";
+    position:absolute;
+    font-size:80px;
+    top:-5px;
+    left:3px;
+}
+
+@keyframes spin{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+}
+
+.cards{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:30px;
+    margin:50px;
+}
+
+.card{
+    width:260px;
+    background:white;
+    border-radius:25px;
+    padding:25px;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+    transition:.4s;
+}
+
+.card:hover{
+    transform:translateY(-10px);
+}
+
+.card h2{
+    color:#00AEEF;
+    margin-bottom:15px;
+}
+
+button{
+    background:#00AEEF;
+    color:white;
+    border:none;
+    padding:15px 35px;
+    border-radius:50px;
+    font-size:18px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+button:hover{
+    background:#0084c8;
+}
+
+footer{
+    margin-top:80px;
+    background:#00AEEF;
+    color:white;
+    text-align:center;
+    padding:20px;
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+<h1>⚽ Future Soccer Drone</h1>
+<p>智慧足球無人機展示網站</p>
+</header>
+
+<section class="hero">
+
+<svg class="drone" viewBox="0 0 300 180">
+
+<circle cx="60" cy="40" r="25" fill="#87CEFA"/>
+<circle cx="240" cy="40" r="25" fill="#87CEFA"/>
+
+<circle cx="60" cy="140" r="25" fill="#87CEFA"/>
+<circle cx="240" cy="140" r="25" fill="#87CEFA"/>
+
+<line x1="60" y1="40" x2="150" y2="90" stroke="#555" stroke-width="5"/>
+<line x1="240" y1="40" x2="150" y2="90" stroke="#555" stroke-width="5"/>
+<line x1="60" y1="140" x2="150" y2="90" stroke="#555" stroke-width="5"/>
+<line x1="240" y1="140" x2="150" y2="90" stroke="#555" stroke-width="5"/>
+
+<ellipse cx="150" cy="90" rx="45" ry="28" fill="#00AEEF"/>
+<circle cx="150" cy="90" r="10" fill="white"/>
+
+</svg>
+
+<div class="ball"></div>
+
+<button onclick="launch()">啟動足球無人機</button>
+
+</section>
+
+<section class="cards">
+
+<div class="card">
+<h2>🚁 AI 飛行</h2>
+<p>智慧飛控、自動避障與精準定位。</p>
+</div>
+
+<div class="card">
+<h2>⚽ 足球模式</h2>
+<p>可進行足球追蹤與空中傳球展示。</p>
+</div>
+
+<div class="card">
+<h2>📷 4K 攝影</h2>
+<p>高速錄影與即時直播。</p>
+</div>
+
+</section>
+
+<footer>
+2026 Future Soccer Drone
+</footer>
+
+<script>
+
+function launch(){
+
+alert("🚁 足球無人機已啟動！");
+
+document.querySelector(".drone").style.animation="fly .8s infinite";
+
+}
+
+</script>
+
+</body>
+</html>
+<section class="game">
+
+<h1>⚽ 足球無人機射門遊戲</h1>
+
+<div id="field">
+
+    <div id="goal">🥅</div>
+
+    <div id="gameBall">⚽</div>
+
+</div>
+
+<h2>
+分數：
+<span id="score">0</span>
+</h2>
+
+<button onclick="shoot()">🚁 無人機射門</button>
+
+<button onclick="resetGame()">重新開始</button>
+
+<p id="message"></p>
+
+</section>
+
+
+<style>
+
+.game{
+    text-align:center;
+    margin:60px auto;
+    padding:30px;
+    background:#e8f8ff;
+    border-radius:30px;
+    width:90%;
+    max-width:700px;
+}
+
+#field{
+    height:250px;
+    background:
+    linear-gradient(#54c954,#38a638);
+    border-radius:20px;
+    position:relative;
+    overflow:hidden;
+    margin:30px 0;
+}
+
+#goal{
+    position:absolute;
+    right:30px;
+    top:80px;
+    font-size:80px;
+}
+
+
+#gameBall{
+
+    position:absolute;
+    left:60px;
+    bottom:70px;
+    font-size:60px;
+
+}
+
+
+.game button{
+
+    margin:10px;
+    background:#00AEEF;
+    color:white;
+    border:none;
+    padding:15px 25px;
+    border-radius:30px;
+    cursor:pointer;
+
+}
+
+
+.game button:hover{
+    background:#007bb5;
+}
+
+
+</style>
+
+
+<script>
+
+let score=0;
+
+
+function shoot(){
+
+let ball=document.getElementById("gameBall");
+let message=document.getElementById("message");
+
+ball.style.transition="1s";
+ball.style.left="80%";
+
+
+setTimeout(()=>{
+
+let result=Math.random();
+
+
+if(result>0.45){
+
+score++;
+
+message.innerHTML="🎉 進球成功！無人機射門 +1";
+
+}else{
+
+message.innerHTML="😢 被守門員擋下！";
+
+}
+
+
+document.getElementById("score").innerHTML=score;
+
+
+ball.style.transition="0s";
+ball.style.left="60px";
+
+
+},1000);
+
+
+}
+
+
+
+function resetGame(){
+
+score=0;
+
+document.getElementById("score").innerHTML=0;
+
+document.getElementById("message").innerHTML=
+"遊戲重新開始！";
+
+}
+
+
+</script>
